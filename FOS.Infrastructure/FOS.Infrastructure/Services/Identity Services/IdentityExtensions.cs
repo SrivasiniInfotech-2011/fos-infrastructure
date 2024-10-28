@@ -1,5 +1,7 @@
 ﻿
 using AMS.API.Authenticator.IdentityServices;
+using FOS.Repository.Implementors;
+using FOS.Repository.Interfaces;
 using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
