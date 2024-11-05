@@ -1,5 +1,5 @@
 ﻿
-using AMS.API.Authenticator.IdentityServices;
+using FOS.Infrastructure.Services.IdentityServices;
 using FOS.Repository.Implementors;
 using FOS.Repository.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IIdentityServerBuilder AddUserStore(this IIdentityServerBuilder builder,IConfiguration configuration)
         {
-            builder.Services.AddSingleton<IUserRepository, UserRepository>(s=>new UserRepository(Convert.ToString(configuration["ConnectionStrings:AMS_CON_STR"])));
+            builder.Services.AddSingleton<IUserRepository, UserRepository>(s=>new UserRepository(configuration.GetConnectionString("FOSConnectionString")!));
             builder.AddProfileService<UserProfileService>();
             builder.AddResourceOwnerValidator<UserResouceOwnerPasswordValidator>();
 

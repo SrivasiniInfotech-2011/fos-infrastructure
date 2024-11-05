@@ -1,8 +1,9 @@
 ﻿using FOS.Repository.Interfaces;
 using IdentityModel;
 using IdentityServer4.Validation;
+using Newtonsoft.Json;
 
-namespace AMS.API.Authenticator.IdentityServices
+namespace FOS.Infrastructure.Services.IdentityServices
 {
     public class UserResouceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
@@ -13,11 +14,8 @@ namespace AMS.API.Authenticator.IdentityServices
         }
         public async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
-            if(await _userRepository.ValidateCredentials(context.UserName, context.Password))
-            {
-                var user = await _userRepository.FindByUsername(context.UserName);
-                context.Result = new GrantValidationResult(user.UserId.ToString(), OidcConstants.AuthenticationMethods.Password);
-            }
+            var user = await _userRepository.FindByUsername(context.UserName);
+            context.Result = new GrantValidationResult(Convert.ToString(user?.UserId), OidcConstants.AuthenticationMethods.Password);
         }
     }
 }

@@ -7,7 +7,7 @@ using IdentityServer4.Services;
 using Microsoft.Extensions.Logging;
 using System.Security.Claims;
 
-namespace AMS.API.Authenticator.IdentityServices
+namespace FOS.Infrastructure.Services.IdentityServices
 {
     public class UserProfileService : IProfileService
     {
@@ -38,8 +38,8 @@ namespace AMS.API.Authenticator.IdentityServices
             {
                 new Claim("role",Constants.UserClaim.AdminDataEventRecords),
                 new Claim("role", Constants.UserClaim.UserAdminEventRecords),
-                new Claim("username", user.UserUserName!),
-                new Claim("email", "seshadri.srivatsan@gmail.com")
+                new Claim("username", user.UserName!),
+                new Claim("email", user.UserEmail!)
             };
 
             context.IssuedClaims = claims;
