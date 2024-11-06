@@ -2,7 +2,7 @@
 using FOS.Repository.Interfaces;
 using MediatR;
 
-namespace AMS.API.Services.Queries
+namespace FOS.Infrastructure.Queries
 {
     public class GetUserByUserNameAndPassword
     {

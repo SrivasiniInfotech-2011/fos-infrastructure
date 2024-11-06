@@ -9,13 +9,13 @@ namespace FOS.Infrastructure.Services.IdentityServices
         private static string _stsUrl = "https://localhost:7020/";
         private static DiscoveryDocumentResponse _disco;
 
-        public static async Task<TokenResponse> LoginAsync(string user, string password)
+        public static async Task<TokenResponse> LoginAsync(string identityServerUrl,string user, string password)
         {
             Console.Title = "Console ResourceOwner Flow RefreshToken";
 
             _disco = await HttpClientDiscoveryExtensions.GetDiscoveryDocumentAsync(
                     _httpClient,
-                    _stsUrl);
+                    identityServerUrl);
 
             if (_disco.IsError)
             {
@@ -55,7 +55,7 @@ namespace FOS.Infrastructure.Services.IdentityServices
                 ClientId = Constants.APP_CLIENT_ID,
                 ClientSecret = Constants.APP_SECRET,
                 //Scope = $"email openid amsApiRequestScope offline_access",
-                Scope = $"email openid {Constants.ApiResource.DataEventRecordScope} offline_access",
+                Scope = $"email openid {Constants.ApiResource.UserApiScope} offline_access",
                 UserName = user,
                 Password = password,
             });
