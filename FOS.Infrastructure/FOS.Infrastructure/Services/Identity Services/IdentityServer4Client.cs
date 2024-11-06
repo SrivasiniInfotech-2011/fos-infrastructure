@@ -54,8 +54,7 @@ namespace FOS.Infrastructure.Services.IdentityServices
 
                 ClientId = Constants.APP_CLIENT_ID,
                 ClientSecret = Constants.APP_SECRET,
-                //Scope = $"email openid amsApiRequestScope offline_access",
-                Scope = $"email openid {Constants.ApiResource.DataEventRecordScope} offline_access",
+                Scope = $"email openid {Constants.ApiResource.UserApiScope} offline_access",
                 UserName = user,
                 Password = password,
             });
