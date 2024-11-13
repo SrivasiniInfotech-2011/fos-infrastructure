@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation;
-using FOS.Models.Requests;
+﻿using FOS.Models.Requests;
 using FOS.Repository.Interfaces;
 using MediatR;
 
@@ -8,7 +6,7 @@ namespace FOS.Infrastructure.Commands
 {
     public class CreateProspectCommand
     {
-        public class Command : IRequest
+        public class Command : IRequest<int>
         {
             public CreateProspectRequestModel ProspectCommand { get; set; }
             public Command(CreateProspectRequestModel newProspect)
@@ -17,14 +15,7 @@ namespace FOS.Infrastructure.Commands
             }
         }
 
-        //public class Validator : CreateUser.Validator<Command, CreateSystemAdminUserModel, SystemAdminUser>
-        //{
-        //    public Validator(IValidator<CreateSystemAdminUserModel> userValidator) : base(userValidator)
-        //    {
-        //    }
-        //}
-
-        public class Handler : IRequestHandler<Command>
+        public class Handler : IRequestHandler<Command,int>
         {
             private readonly IProspectRepository _prospectRepository;
             public Handler(IProspectRepository repository)
@@ -32,7 +23,7 @@ namespace FOS.Infrastructure.Commands
                 _prospectRepository=repository;
             }
 
-            public Task Handle(Command request, CancellationToken cancellationToken)
+            public Task<int> Handle(Command request, CancellationToken cancellationToken)
             {
                 int errorCode = 0;
                 return _prospectRepository.InsertProspectDetails(request.ProspectCommand.Prospect.CompanyId.GetValueOrDefault(), request.ProspectCommand.Prospect.LocationId.GetValueOrDefault(),
@@ -43,7 +34,7 @@ namespace FOS.Infrastructure.Commands
                     request.ProspectCommand.Prospect.CommunicationAddress.AddressLine2, request.ProspectCommand.Prospect.CommunicationAddress?.Landmark, request.ProspectCommand.Prospect.CommunicationAddress?.City,
                     request.ProspectCommand.Prospect.CommunicationAddress.StateId, request.ProspectCommand.Prospect.CommunicationAddress?.CountryId, request.ProspectCommand.Prospect.CommunicationAddress?.Pincode,
                     request.ProspectCommand.Prospect.PermanentAddress?.AddressLine1, request.ProspectCommand.Prospect.PermanentAddress?.AddressLine2, request.ProspectCommand.Prospect.PermanentAddress?.Landmark, request.ProspectCommand.Prospect.PermanentAddress?.City,
-                    request.ProspectCommand.Prospect.PermanentAddress?.StateId, request.ProspectCommand.Prospect.PermanentAddress?.CountryId, request.ProspectCommand.Prospect.PermanentAddress?.Pincode, request.ProspectCommand.Prospect.AadharImagePath,
+                    request.ProspectCommand.Prospect.PermanentAddress?.StateId, request.ProspectCommand.Prospect.PermanentAddress?.CountryId, request.ProspectCommand.Prospect.PermanentAddress?.Pincode, request.ProspectCommand.Prospect.AadharNumber,
                     request.ProspectCommand.Prospect.AadharImagePath, request.ProspectCommand.Prospect.PanNumber, request.ProspectCommand.Prospect.PanNumberImagePath,
                     request.ProspectCommand.Prospect.ProspectImagePath, request.ProspectCommand.UserId, request.ProspectCommand.Prospect.ProspectId, request.ProspectCommand.Prospect.ProspectCode,
                     errorCode);
