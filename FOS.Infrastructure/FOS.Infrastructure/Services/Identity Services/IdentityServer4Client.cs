@@ -1,4 +1,5 @@
 ﻿using FOS.Models.Constants;
+using FOS.Models.Entities;
 using IdentityModel.Client;
 
 namespace FOS.Infrastructure.Services.IdentityServices
@@ -9,7 +10,7 @@ namespace FOS.Infrastructure.Services.IdentityServices
         private static string _stsUrl = "https://localhost:7020/";
         private static DiscoveryDocumentResponse _disco;
 
-        public static async Task<TokenResponse> LoginAsync(string identityServerUrl,string user, string password)
+        public static async Task<TokenResponse> LoginAsync(string identityServerUrl, string user, string password)
         {
             Console.Title = "Console ResourceOwner Flow RefreshToken";
 
@@ -25,25 +26,27 @@ namespace FOS.Infrastructure.Services.IdentityServices
             return await RequestTokenAsync(user, password);
         }
 
-        public static async Task RunRefreshAsync(TokenResponse response, int milliseconds)
+        public static async Task<TokenResponse> RunRefreshAsync(string existingRefreshToken)
         {
-            //var refresh_token = response.RefreshToken;
-
+            var refresh_token = existingRefreshToken;
+            var access_token = string.Empty;
             //while (true)
             //{
-            //    response = await RefreshTokenAsync(refresh_token);
+            var response = await RefreshTokenAsync(refresh_token);
 
-            //    // Get the resource data using the new tokens...
-            //    await ResourceDataClient.GetDataAndDisplayInConsoleAsync(response.AccessToken);
+            // Get the resource data using the new tokens...
+            //await ResourceDataClient.GetDataAndDisplayInConsoleAsync(response.AccessToken);
 
-            //    if (response.RefreshToken != refresh_token)
-            //    {
-            //        ShowResponse(response);
-            //        refresh_token = response.RefreshToken;
-            //    }
+            //if (response.RefreshToken != refresh_token)
+            //{
+            //    //ShowResponse(response);
+            //    access_token = response.AccessToken;
+            //    refresh_token = response.RefreshToken;
+            //}
 
             //    Task.Delay(milliseconds).Wait();
             //}
+            return response;
         }
         private static async Task<TokenResponse> RequestTokenAsync(string user, string password)
         {

@@ -10,25 +10,17 @@ namespace FOS.Infrastructure.Queries
         {
             public string UserName { get; }
             public string Password { get; }
-            public Query(string userName,string password)
+            public Query(string userName, string password)
             {
                 UserName = userName;
                 Password = password;
             }
         }
 
-        public class Handler : IRequestHandler<Query, User?>
+        public class Handler(IUserRepository repository) : IRequestHandler<Query, User?>
         {
-            private readonly IUserRepository userRepository;
-
-            public Handler(IUserRepository repository)
-            {
-                userRepository = repository;
-            }
-            public async Task<User?> Handle(Query request, CancellationToken cancellationToken)
-            {
-                return await userRepository.FindByUsername(request.UserName);
-            }
+            public async Task<User?> Handle(Query request, CancellationToken cancellationToken) =>
+                await repository.FindByUsername(request.UserName);
         }
     }
 }

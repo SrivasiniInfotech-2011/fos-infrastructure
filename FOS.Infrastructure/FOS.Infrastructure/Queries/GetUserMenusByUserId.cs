@@ -15,18 +15,10 @@ namespace FOS.Infrastructure.Queries
             }
         }
 
-        public class Handler : IRequestHandler<Query, List<UserMenu>>
+        public class Handler(IUserRepository repository) : IRequestHandler<Query, List<UserMenu>>
         {
-            private readonly IUserRepository userRepository;
-
-            public Handler(IUserRepository repository)
-            {
-                userRepository = repository;
-            }
-            public async Task<List<UserMenu>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                return await userRepository.GetUserMenus(request.UserId);
-            }
+            public async Task<List<UserMenu>> Handle(Query request, CancellationToken cancellationToken) =>
+                await repository.GetUserMenus(request.UserId);
         }
     }
 }

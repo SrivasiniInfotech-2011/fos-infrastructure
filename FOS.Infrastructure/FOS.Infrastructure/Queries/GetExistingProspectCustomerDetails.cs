@@ -25,18 +25,10 @@ namespace FOS.Infrastructure.Queries
             }
         }
 
-        public class Handler : IRequestHandler<Query, Prospect>
+        public class Handler(IProspectRepository repository) : IRequestHandler<Query, Prospect>
         {
-            private readonly IProspectRepository _prospectRepository;
-
-            public Handler(IProspectRepository repository)
-            {
-                _prospectRepository = repository;
-            }
-            public async Task<Prospect> Handle(Query request, CancellationToken cancellationToken)
-            {
-                return await _prospectRepository.GetExistingProspectCustomerDetails(request.CompanyId,request.UserId,request.MobileNumber,request.AadharNumber,request.PanNumber,request.ProspectId);
-            }
+            public async Task<Prospect> Handle(Query request, CancellationToken cancellationToken) =>
+                await repository.GetExistingProspectCustomerDetails(request.CompanyId, request.UserId, request.MobileNumber, request.AadharNumber, request.PanNumber, request.ProspectId);
         }
     }
 }
