@@ -1,11 +1,6 @@
 ﻿using FluentValidation;
 using FOS.Models.Constants;
 using FOS.Models.Requests;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FOS.Infrastructure.Validators
 {
