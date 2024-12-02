@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FOS.Infrastructure.Services.File;
+using FOS.Models.Entities;
+using static FOS.Models.Constants.Constants;
 
 namespace FOS.Infrastructure
 {
+    public delegate IFileService<ProspectExportData> FileServiceResolver(FileOutput key);
+
     public class Startup
     {
     }

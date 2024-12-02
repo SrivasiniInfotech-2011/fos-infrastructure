@@ -1,11 +1,7 @@
 ﻿using FOS.Models.Entities;
 using FOS.Repository.Interfaces;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static FOS.Models.Constants.Constants;
 
 namespace FOS.Infrastructure.Queries
 {
@@ -16,7 +12,7 @@ namespace FOS.Infrastructure.Queries
             public int? CompanyId { get; }
             public int? UserId { get; }
             public int? Option { get; }
-            public Query(int? userId, int? companyId, int option)
+            public Query(int? userId, int? companyId, int? option)
             {
                 UserId = userId;
                 CompanyId = companyId;
@@ -26,7 +22,7 @@ namespace FOS.Infrastructure.Queries
         public class Handler(IProspectRepository repository) : IRequestHandler<Query, IEnumerable<DocumentCategory>?>
         {
             public Task<IEnumerable<DocumentCategory>?> Handle(Query request, CancellationToken cancellationToken) =>
-                Task.Run(() => repository.GetDocumentCategories(request.CompanyId.GetValueOrDefault(), request.UserId.GetValueOrDefault(), request.Option.GetValueOrDefault()));
+                Task.Run(() => repository.GetDocumentCategories(request.CompanyId.GetValueOrDefault(), request.UserId.GetValueOrDefault(),request.Option.GetValueOrDefault()));
         }
     }
 }
