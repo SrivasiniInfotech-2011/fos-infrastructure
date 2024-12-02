@@ -21,7 +21,7 @@ namespace FOS.Infrastructure.Queries
         public class Handler(IProspectRepository repository) : IRequestHandler<Query, IEnumerable<FieldExecutive>?>
         {
             public Task<IEnumerable<FieldExecutive>?> Handle(Query request, CancellationToken cancellationToken) =>
-                Task.Run(() => repository.GetFieldExecutives(request.CompanyId.GetValueOrDefault(), request.UserId.GetValueOrDefault(), request.SearchPrefix));
+                Task.Run(() => repository.GetFieldExecutives(request.CompanyId.GetValueOrDefault(), request.UserId.GetValueOrDefault(), request.SearchPrefix!));
         }
     }
 }
