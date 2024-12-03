@@ -58,15 +58,14 @@ namespace FOS.Infrastructure.Commands
                     request.UserdetailsCommand.FatherName,
                     request.UserdetailsCommand.MotherName,
                     request.UserdetailsCommand.SpouseName,
-                    request.UserdetailsCommand.MaritialID,
+                    request.UserdetailsCommand.MaritialID.GetValueOrDefault(),
                     request.UserdetailsCommand.AadharNumber,
                     request.UserdetailsCommand.PanNumber,
                     request.UserdetailsCommand.Address,
                     request.UserdetailsCommand.UserImagepath,
                     request.UserdetailsCommand.IsActive.GetValueOrDefault(),
                     request.UserdetailsCommand.CreatedBy.GetValueOrDefault(),
-                    request.UserdetailsCommand.ErrorCode.GetValueOrDefault(),
-                                         );
+                    request.UserdetailsCommand.ErrorCode.GetValueOrDefault());
             }
         }
     }
