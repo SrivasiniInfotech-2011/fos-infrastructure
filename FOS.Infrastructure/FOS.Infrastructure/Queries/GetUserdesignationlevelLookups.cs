@@ -9,11 +9,22 @@ using System.Threading.Tasks;
 
 namespace FOS.Infrastructure.Queries
 {
-    public class GetUserdesignationlevelLookups
+    public class GetUserDesignationlevelLookups
     {
 
         public class Query : IRequest<List<Lookup>>
         {
+            public int? CompanyId { get; }
+           
+
+
+            public Query( int? companyId)
+            {
+               
+                CompanyId = companyId;
+
+            }
+
         }
 
         public class Handler : IRequestHandler<Query, List<Lookup>>
@@ -26,7 +37,7 @@ namespace FOS.Infrastructure.Queries
             }
             public async Task<List<Lookup>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _usermanagementRepository.GetUserdesignationlevelLookup();
+                return await _usermanagementRepository.GetUserdesignationlevelLookup(request.CompanyId);
             }
         }
     }
