@@ -1,6 +1,8 @@
 ﻿using FOS.Models.Constants;
 using FOS.Models.Entities;
 using IdentityModel.Client;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FOS.Infrastructure.Services.IdentityServices
 {
@@ -9,6 +11,16 @@ namespace FOS.Infrastructure.Services.IdentityServices
         private static HttpClient _httpClient = new HttpClient();
         private static string _stsUrl = "https://localhost:7020/";
         private static DiscoveryDocumentResponse _disco;
+        //static IdentityServer4Client()
+        //{
+        //    var handler = new HttpClientHandler
+        //    {
+        //        ClientCertificateOptions = ClientCertificateOption.Manual,
+        //        SslProtocols = SslProtocols.Tls12
+        //    };
+        //    handler.ClientCertificates.Add(new X509Certificate2(@"D:\FOS\PublishFolder\FOS.Identity.Server\fosServerCertificate.pfx", "Fos@123"));
+        //    _httpClient = new HttpClient(handler);
+        //}
 
         public static async Task<TokenResponse> LoginAsync(string identityServerUrl, string user, string password)
         {
