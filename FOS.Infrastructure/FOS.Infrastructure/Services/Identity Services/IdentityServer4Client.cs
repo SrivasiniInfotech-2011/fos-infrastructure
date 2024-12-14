@@ -1,5 +1,8 @@
 ﻿using FOS.Models.Constants;
+using FOS.Models.Entities;
 using IdentityModel.Client;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
 
 namespace FOS.Infrastructure.Services.IdentityServices
 {
@@ -8,8 +11,18 @@ namespace FOS.Infrastructure.Services.IdentityServices
         private static HttpClient _httpClient = new HttpClient();
         private static string _stsUrl = "https://localhost:7020/";
         private static DiscoveryDocumentResponse _disco;
+        //static IdentityServer4Client()
+        //{
+        //    var handler = new HttpClientHandler
+        //    {
+        //        ClientCertificateOptions = ClientCertificateOption.Manual,
+        //        SslProtocols = SslProtocols.Tls12
+        //    };
+        //    handler.ClientCertificates.Add(new X509Certificate2(@"D:\FOS\PublishFolder\FOS.Identity.Server\fosServerCertificate.pfx", "Fos@123"));
+        //    _httpClient = new HttpClient(handler);
+        //}
 
-        public static async Task<TokenResponse> LoginAsync(string identityServerUrl,string user, string password)
+        public static async Task<TokenResponse> LoginAsync(string identityServerUrl, string user, string password)
         {
             Console.Title = "Console ResourceOwner Flow RefreshToken";
 
@@ -25,25 +38,27 @@ namespace FOS.Infrastructure.Services.IdentityServices
             return await RequestTokenAsync(user, password);
         }
 
-        public static async Task RunRefreshAsync(TokenResponse response, int milliseconds)
+        public static async Task<TokenResponse> RunRefreshAsync(string existingRefreshToken)
         {
-            //var refresh_token = response.RefreshToken;
-
+            var refresh_token = existingRefreshToken;
+            var access_token = string.Empty;
             //while (true)
             //{
-            //    response = await RefreshTokenAsync(refresh_token);
+            var response = await RefreshTokenAsync(refresh_token);
 
-            //    // Get the resource data using the new tokens...
-            //    await ResourceDataClient.GetDataAndDisplayInConsoleAsync(response.AccessToken);
+            // Get the resource data using the new tokens...
+            //await ResourceDataClient.GetDataAndDisplayInConsoleAsync(response.AccessToken);
 
-            //    if (response.RefreshToken != refresh_token)
-            //    {
-            //        ShowResponse(response);
-            //        refresh_token = response.RefreshToken;
-            //    }
+            //if (response.RefreshToken != refresh_token)
+            //{
+            //    //ShowResponse(response);
+            //    access_token = response.AccessToken;
+            //    refresh_token = response.RefreshToken;
+            //}
 
             //    Task.Delay(milliseconds).Wait();
             //}
+            return response;
         }
         private static async Task<TokenResponse> RequestTokenAsync(string user, string password)
         {

@@ -15,18 +15,12 @@ namespace FOS.Infrastructure.Commands
             }
         }
 
-        public class Handler : IRequestHandler<Command,int>
+        public class Handler(IProspectRepository repository) : IRequestHandler<Command, int>
         {
-            private readonly IProspectRepository _prospectRepository;
-            public Handler(IProspectRepository repository)
-            {
-                _prospectRepository=repository;
-            }
-
             public Task<int> Handle(Command request, CancellationToken cancellationToken)
             {
                 int errorCode = 0;
-                return _prospectRepository.InsertProspectDetails(request.ProspectCommand.Prospect.CompanyId.GetValueOrDefault(), request.ProspectCommand.Prospect.LocationId.GetValueOrDefault(),
+                return repository.InsertProspectDetails(request.ProspectCommand.Prospect.CompanyId.GetValueOrDefault(), request.ProspectCommand.Prospect.LocationId.GetValueOrDefault(),
                     request.ProspectCommand.Prospect.ProspectTypeId.GetValueOrDefault(), request.ProspectCommand.Prospect.CustomerId.GetValueOrDefault(), request.ProspectCommand.Prospect.CustomerCode,
                     request.ProspectCommand.Prospect.GenderId, request.ProspectCommand.Prospect.ProspectName, request.ProspectCommand.Prospect.ProspectDate,
                     request.ProspectCommand.Prospect.DateofBirth, request.ProspectCommand.Prospect.MobileNumber, request.ProspectCommand.Prospect.AlternateMobileNumber,

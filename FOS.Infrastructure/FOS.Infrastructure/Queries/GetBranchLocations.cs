@@ -1,11 +1,6 @@
-﻿using FluentValidation;
-using FluentValidation.Internal;
-using FOS.Infrastructure.Validators;
-using FOS.Models.Constants;
-using FOS.Models.Entities;
+﻿using FOS.Models.Entities;
 using FOS.Repository.Interfaces;
 using MediatR;
-using static FOS.Infrastructure.Commands.CreateProspectCommand;
 
 namespace FOS.Infrastructure.Queries
 {
@@ -25,18 +20,10 @@ namespace FOS.Infrastructure.Queries
                 IsActive = isActive;
             }
         }
-        public class Handler : IRequestHandler<Query, List<Location>>
+        public class Handler(IProspectRepository repository) : IRequestHandler<Query, List<Location>>
         {
-            private readonly IProspectRepository _prospectRepository;
-
-            public Handler(IProspectRepository repository)
-            {
-                _prospectRepository = repository;
-            }
-            public async Task<List<Location>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                return await _prospectRepository.GetBranchLocations(request.CompanyId, request.UserId, request.LobId, request.IsActive);
-            }
+            public async Task<List<Location>> Handle(Query request, CancellationToken cancellationToken) =>
+                await repository.GetBranchLocations(request.CompanyId, request.UserId, request.LobId, request.IsActive);
         }
     }
 }

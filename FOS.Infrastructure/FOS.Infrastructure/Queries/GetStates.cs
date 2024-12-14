@@ -14,18 +14,10 @@ namespace FOS.Infrastructure.Queries
                 CompanyId = companyId;
             }
         }
-        public class Handler : IRequestHandler<Query, List<Lookup>>
+        public class Handler(IProspectRepository repository) : IRequestHandler<Query, List<Lookup>>
         {
-            private readonly IProspectRepository _prospectRepository;
-
-            public Handler(IProspectRepository repository)
-            {
-                _prospectRepository = repository;
-            }
-            public async Task<List<Lookup>> Handle(Query request, CancellationToken cancellationToken)
-            {
-                return await _prospectRepository.GetStateLookups();
-            }
+            public async Task<List<Lookup>> Handle(Query request, CancellationToken cancellationToken) =>
+                await repository.GetStateLookups();
         }
     }
 }
