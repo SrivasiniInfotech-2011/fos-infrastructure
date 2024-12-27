@@ -12,7 +12,7 @@ namespace FOS.Infrastructure.Queries
     public class ViewUserDetails
     {
 
-        public class Query : IRequest<InsertUserDetailsModel>
+        public class Query : IRequest<GetInsertUserDetailsModel>
         {
             public int? CompanyId { get; set; }
             public int? UserId { get; set; }
@@ -24,7 +24,7 @@ namespace FOS.Infrastructure.Queries
             }
         }
 
-        public class Handler : IRequestHandler<Query, InsertUserDetailsModel>
+        public class Handler : IRequestHandler<Query, GetInsertUserDetailsModel>
         {
             private readonly IUsermanagementRepository _getuserrepository;
 
@@ -32,7 +32,7 @@ namespace FOS.Infrastructure.Queries
             {
                 _getuserrepository = repository;
             }
-            public async Task<InsertUserDetailsModel> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<GetInsertUserDetailsModel> Handle(Query request, CancellationToken cancellationToken)
             {
                 return await _getuserrepository.GetExistingUserDetails(request.CompanyId, request.UserId);
             }

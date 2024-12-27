@@ -52,7 +52,7 @@ namespace FOS.Infrastructure.Commands
                     request.UserdetailsCommand.Designation,
                     request.UserdetailsCommand.UserLevelID.GetValueOrDefault(),
                     request.UserdetailsCommand.ReportingNextlevel.GetValueOrDefault(),
-                    request.UserdetailsCommand.UserGroup.GetValueOrDefault(),
+                    request.UserdetailsCommand.UserGroup,
                     request.UserdetailsCommand.EmailID,
                     request.UserdetailsCommand.Dateofbirth.GetValueOrDefault(),
                     request.UserdetailsCommand.FatherName,
