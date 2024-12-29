@@ -1,5 +1,7 @@
-﻿using FOS.Models.Entities;
+﻿using FOS.Infrastructure.Services.FileServer;
+using FOS.Models.Entities;
 using FOS.Models.Requests;
+using FOS.Infrastructure.Services.FileServer;
 using FOS.Repository.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -38,6 +40,8 @@ namespace FOS.Infrastructure.Commands
 
             public Task<int> Handle(Command request, CancellationToken cancellationtoken)
             {
+                
+
                 int errorcode = 0;
                 //the Datas from UserInsertDetailsModel
                 return _usermanagementrepository.InsertUserDetails(request.UserdetailsCommand.CompanyId.GetValueOrDefault(),
@@ -66,6 +70,8 @@ namespace FOS.Infrastructure.Commands
                     request.UserdetailsCommand.IsActive.GetValueOrDefault(),
                     request.UserdetailsCommand.CreatedBy.GetValueOrDefault(),
                     request.UserdetailsCommand.ErrorCode.GetValueOrDefault());
+
+               
             }
         }
     }
