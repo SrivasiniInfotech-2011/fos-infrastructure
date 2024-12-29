@@ -1,46 +1,27 @@
-﻿using FOS.Models.Entities;
-using FOS.Models.Requests;
+﻿using FOS.Infrastructure.Services.FileServer;
+using FOS.Models.Entities;
 using FOS.Repository.Interfaces;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using static IdentityServer4.Models.IdentityResources;
 
 namespace FOS.Infrastructure.Commands
 {
     public class InsertUserDetails
     {
-        public class Command : IRequest<int>
+        public class Command(InsertUserDetailsModel newUserdetails) : IRequest<int>
         {
             // here give model name
-            public InsertUserDetailsModel UserdetailsCommand { get; set; }
-            public Command(InsertUserDetailsModel newUserdetails)
-            {
-                UserdetailsCommand = newUserdetails;
-            }
+            public InsertUserDetailsModel UserdetailsCommand { get; set; } = newUserdetails;
         }
 
 
-        public class Handler : IRequestHandler<Command, int>
+        public class Handler(IUsermanagementRepository repository,IFileServerService fileServerService) : IRequestHandler<Command, int>
         {
-
-            // here give repository name
-            private readonly IUsermanagementRepository _usermanagementrepository;
-            public Handler(IUsermanagementRepository repository)
+            public async Task<int> Handle(Command request, CancellationToken cancellationtoken)
             {
-                _usermanagementrepository = repository;
-            }
-
-            public Task<int> Handle(Command request, CancellationToken cancellationtoken)
-            {
-                int errorcode = 0;
-                //the Datas from UserInsertDetailsModel
-                return _usermanagementrepository.InsertUserDetails(request.UserdetailsCommand.CompanyId.GetValueOrDefault(),
+                var userImageContent = Encoding.UTF8.GetBytes(request.UserdetailsCommand.UserImageContent!);
+                request.UserdetailsCommand.UserImagepath = await fileServerService.UploadFile($"USERS/{request.UserdetailsCommand.UserName.ToUpper()}/{request.UserdetailsCommand.UserImagepath}", userImageContent);
+                return await repository.InsertUserDetails(request.UserdetailsCommand.CompanyId.GetValueOrDefault(),
                     request.UserdetailsCommand.UserID.GetValueOrDefault(),
                     request.UserdetailsCommand.UserCode,
                     request.UserdetailsCommand.UserName,
