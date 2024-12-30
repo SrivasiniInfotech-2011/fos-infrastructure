@@ -1,9 +1,10 @@
 ﻿using FOS.Models.Configurations;
+using Microsoft.Extensions.Logging;
 using System.Net;
 
 namespace FOS.Infrastructure.Services.FileServer
 {
-    public class FileServerService(FileServerConfiguration configuration) : IFileServerService
+    public class FileServerService(FileServerConfiguration configuration, ILogger<FileServerService> logger) : IFileServerService
     {
         /// <summary>
         /// Uploads File to a File Server
@@ -13,40 +14,25 @@ namespace FOS.Infrastructure.Services.FileServer
         /// <returns>value of type <see cref="FtpWebResponse>"/></returns>
         public async Task<string> UploadFile(string fileName, byte[] fileBytes)
         {
+            var filePath = $@"{configuration.CmsFilePath}\{fileName}";
+
             try
             {
-                // Combine the FTP URL with the remote path
-                string uploadUrl = $"{configuration.Host}/documents/{fileName}";
-
-                // Create a new FtpWebRequest object
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(uploadUrl);
-
-                // Set the request method to UploadFile
-                request.Method = WebRequestMethods.Ftp.UploadFile;
-
-                // Provide the credentials
-                request.Credentials = new NetworkCredential(configuration.Username, configuration.Password);
-
-                // Set the request to use binary transfer mode
-                request.UseBinary = true;
-
-                // Set the ContentLength property
-                request.ContentLength = fileBytes.Length;
-
-                // Write the file contents to the request stream
-                using (Stream requestStream = request.GetRequestStream())
+                logger.LogInformation($"Writing to File Path:{filePath}");
+                var directory = Path.GetDirectoryName(filePath);
+                Directory.CreateDirectory(directory);
+                using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
                 {
-                    await requestStream.WriteAsync(fileBytes, 0, fileBytes.Length);
+                    await fileStream.WriteAsync(fileBytes);
+                    await fileStream.FlushAsync();
+                    fileStream.Close();
                 }
-
-                // Get the response from the FTP server
-                using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
-                {
-                    return response.ResponseUri.ToString();
-                }
+                logger.LogInformation($"Writing to File Path:{filePath} has been successfully completed.");
+                return @$"{configuration.CmsUrl}/{fileName}";
             }
             catch (Exception ex)
             {
+                logger.LogInformation($"An Exception occured while writing to File Path: {filePath}. Exception Message:{ex.Message}. Stack Trtace:{ex.StackTrace}");
                 throw;
             }
         }
