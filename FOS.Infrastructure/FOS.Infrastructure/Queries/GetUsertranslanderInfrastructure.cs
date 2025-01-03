@@ -1,5 +1,6 @@
 ﻿using FOS.Models.Entities;
 using FOS.Repository.Interfaces;
+using iText.Layout.Element;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace FOS.Infrastructure.Queries
     public class GetUsertranslanderInfrastructure
     {
 
-        public class Query : IRequest<GetUserTranslanderModel>
+        public class Query : IRequest<List<GetUserTranslanderModel>>
         {
             public int? CompanyId { get; set; }
             public int? UserId { get; set; }
@@ -24,7 +25,7 @@ namespace FOS.Infrastructure.Queries
             }
         }
 
-        public class Handler : IRequestHandler<Query, GetUserTranslanderModel>
+        public class Handler : IRequestHandler<Query, List<GetUserTranslanderModel>>
         {
             private readonly IUsermanagementRepository _getuserrepository;
 
@@ -32,7 +33,7 @@ namespace FOS.Infrastructure.Queries
             {
                 _getuserrepository = repository;
             }
-            public async Task<GetUserTranslanderModel> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<List<GetUserTranslanderModel>> Handle(Query request, CancellationToken cancellationToken)
             {
                 return await _getuserrepository.getUsertranslander(request.CompanyId, request.UserId);
             }

@@ -22,11 +22,11 @@ namespace FOS.Infrastructure.Commands
                     if (guarantor!=null)
                     {
                         var aadharContentBytes = Encoding.UTF8.GetBytes(guarantor.AadharImageContent);
-                        var aadharFileServerUrl=await fileServerService.UploadFile($"{guarantor.GuarantorName}/{guarantor.AadharImagePath}", aadharContentBytes);
+                        var aadharFileServerUrl=await fileServerService.UploadFile($"GUARANTORS/{guarantor.GuarantorName}/{guarantor.AadharImagePath}", aadharContentBytes);
                         var panContentBytes = Encoding.UTF8.GetBytes(guarantor.PanImageContent);
-                        var panFileServerUrl = await fileServerService.UploadFile($"{guarantor.GuarantorName}/{guarantor.PanImagePath}", panContentBytes);
+                        var panFileServerUrl = await fileServerService.UploadFile($"GUARANTORS/{guarantor.GuarantorName}/{guarantor.PanImagePath}", panContentBytes);
                         var guarantorContentBytes = Encoding.UTF8.GetBytes(guarantor.GuarantorImageContent);
-                        var guarantorFileServerUrl = await fileServerService.UploadFile($"{guarantor.GuarantorName}/{guarantor.GuarantorImagePath}", guarantorContentBytes);
+                        var guarantorFileServerUrl = await fileServerService.UploadFile($"GUARANTORS/{guarantor.GuarantorName}/{guarantor.GuarantorImagePath}", guarantorContentBytes);
                         guarantor.AadharImagePath = aadharFileServerUrl;
                         guarantor.PanImagePath = panFileServerUrl;
                         guarantor.GuarantorImagePath = guarantorFileServerUrl;
