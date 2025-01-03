@@ -19,8 +19,8 @@ namespace FOS.Infrastructure.Commands
         {
             public async Task<int> Handle(Command request, CancellationToken cancellationtoken)
             {
-                var userImageContent = Encoding.UTF8.GetBytes(request.UserdetailsCommand.UserImageContent!);
-                request.UserdetailsCommand.UserImagepath = await fileServerService.UploadFile($"USERS/{request.UserdetailsCommand.UserName.ToUpper()}/{request.UserdetailsCommand.UserImagepath}", userImageContent);
+                //request.UserdetailsCommand.UserImagepath = await fileServerService.UploadFile($"USERS/{request.UserdetailsCommand.UserName.ToUpper()}/{request.UserdetailsCommand.UserImagepath}", userImageContent);
+               var UserImagepathServer = await fileServerService.UploadFile($"USERS/{request.UserdetailsCommand.UserName.ToUpper()}/{request.UserdetailsCommand.UserImagepath}", request.UserdetailsCommand.UserImageContent!);
                 return await repository.InsertUserDetails(request.UserdetailsCommand.CompanyId.GetValueOrDefault(),
                     request.UserdetailsCommand.UserID.GetValueOrDefault(),
                     request.UserdetailsCommand.UserCode,
@@ -43,7 +43,7 @@ namespace FOS.Infrastructure.Commands
                     request.UserdetailsCommand.AadharNumber,
                     request.UserdetailsCommand.PanNumber,
                     request.UserdetailsCommand.Address,
-                    request.UserdetailsCommand.UserImagepath,
+                    request.UserdetailsCommand.UserImagepath= UserImagepathServer,
                     request.UserdetailsCommand.IsActive.GetValueOrDefault(),
                     request.UserdetailsCommand.CreatedBy.GetValueOrDefault(),
                     request.UserdetailsCommand.ErrorCode.GetValueOrDefault());

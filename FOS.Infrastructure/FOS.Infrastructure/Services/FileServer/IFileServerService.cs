@@ -10,6 +10,6 @@ namespace FOS.Infrastructure.Services.FileServer
         /// <param name="fileName">File Name.</param>
         /// <param name="fileBytes"> File Bytes.</param>
         /// <returns>value of type <see cref="FtpWebResponse>"/></returns>
-        public Task<string> UploadFile(string fileName, byte[] fileBytes);
+        public Task<string> UploadFile(string fileName, string fileContent);
     }
 }
