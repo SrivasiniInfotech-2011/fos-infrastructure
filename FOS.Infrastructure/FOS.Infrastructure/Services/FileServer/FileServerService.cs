@@ -12,7 +12,7 @@ namespace FOS.Infrastructure.Services.FileServer
         /// <param name="fileName">File Name.</param>
         /// <param name="fileStream"> File Stream.</param>
         /// <returns>value of type <see cref="FtpWebResponse>"/></returns>
-        public async Task<string> UploadFile(string fileName, byte[] fileBytes)
+        public async Task<string> UploadFile(string fileName, string fileContent)
         {
             var filePath = $@"{configuration.CmsFilePath}\{fileName}";
 
@@ -21,12 +21,7 @@ namespace FOS.Infrastructure.Services.FileServer
                 logger.LogInformation($"Writing to File Path:{filePath}");
                 var directory = Path.GetDirectoryName(filePath);
                 Directory.CreateDirectory(directory);
-                using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
-                {
-                    await fileStream.WriteAsync(fileBytes);
-                    await fileStream.FlushAsync();
-                    fileStream.Close();
-                }
+                System.IO.File.WriteAllBytes(filePath, Convert.FromBase64String(fileContent));
                 logger.LogInformation($"Writing to File Path:{filePath} has been successfully completed.");
                 return @$"{configuration.CmsUrl}/{fileName}";
             }
