@@ -1,4 +1,5 @@
-﻿using FOS.Models.Requests;
+﻿using FOS.Infrastructure.Services.FileServer;
+using FOS.Models.Requests;
 using FOS.Repository.Interfaces;
 using MediatR;
 
@@ -15,12 +16,27 @@ namespace FOS.Infrastructure.Commands
             }
         }
 
-        public class Handler(IProspectRepository repository) : IRequestHandler<Command, int>
+        public class Handler(IProspectRepository repository, IFileServerService fileServerService) : IRequestHandler<Command, int>
         {
-            public Task<int> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<int> Handle(Command request, CancellationToken cancellationToken)
             {
                 int errorCode = 0;
-                return repository.InsertProspectDetails(request.ProspectCommand.Prospect.CompanyId.GetValueOrDefault(), request.ProspectCommand.Prospect.LocationId.GetValueOrDefault(),
+                if (!request.ProspectCommand.Prospect.AadharImagePath.Contains("http"))
+                {
+                    var aadharFileServerUrl = fileServerService.UploadFile($"PROSPECTS/{request.ProspectCommand.Prospect.AadharImagePath}", request.ProspectCommand.Prospect.AadharImageContent);
+                    request.ProspectCommand.Prospect.AadharImagePath = aadharFileServerUrl;
+                }
+                if (!request.ProspectCommand.Prospect.PanNumberImagePath.Contains("http"))
+                {
+                    var panFileServerUrl = fileServerService.UploadFile($"PROSPECTS/{request.ProspectCommand.Prospect.PanNumberImagePath}", request.ProspectCommand.Prospect.PanNumberImageContent);
+                    request.ProspectCommand.Prospect.PanNumberImagePath = panFileServerUrl;
+                }
+                if (!request.ProspectCommand.Prospect.ProspectImagePath.Contains("http"))
+                {
+                    var guarantorFileServerUrl = fileServerService.UploadFile($"PROSPECTS/{request.ProspectCommand.Prospect.ProspectImagePath}", request.ProspectCommand.Prospect.ProspectImageContent);
+                    request.ProspectCommand.Prospect.ProspectImagePath = guarantorFileServerUrl;
+                }
+                return await repository.InsertProspectDetails(request.ProspectCommand.Prospect.CompanyId.GetValueOrDefault(), request.ProspectCommand.Prospect.LocationId.GetValueOrDefault(),
                     request.ProspectCommand.Prospect.ProspectTypeId.GetValueOrDefault(), request.ProspectCommand.Prospect.CustomerId.GetValueOrDefault(), request.ProspectCommand.Prospect.CustomerCode,
                     request.ProspectCommand.Prospect.GenderId, request.ProspectCommand.Prospect.ProspectName, request.ProspectCommand.Prospect.ProspectDate,
                     request.ProspectCommand.Prospect.DateofBirth, request.ProspectCommand.Prospect.MobileNumber, request.ProspectCommand.Prospect.AlternateMobileNumber,

@@ -15,12 +15,15 @@ namespace FOS.Infrastructure.Commands
         }
 
 
-        public class Handler(IUsermanagementRepository repository,IFileServerService fileServerService) : IRequestHandler<Command, int>
+        public class Handler(IUsermanagementRepository repository, IFileServerService fileServerService) : IRequestHandler<Command, int>
         {
             public async Task<int> Handle(Command request, CancellationToken cancellationtoken)
             {
-                //request.UserdetailsCommand.UserImagepath = await fileServerService.UploadFile($"USERS/{request.UserdetailsCommand.UserName.ToUpper()}/{request.UserdetailsCommand.UserImagepath}", userImageContent);
-               var UserImagepathServer = await fileServerService.UploadFile($"USERS/{request.UserdetailsCommand.UserName.ToUpper()}/{request.UserdetailsCommand.UserImagepath}", request.UserdetailsCommand.UserImageContent!);
+                if (!request.UserdetailsCommand.UserImagepath.Contains("http"))
+                {
+                    var userImagepathServer = fileServerService.UploadFile($"USERS/{request.UserdetailsCommand.UserName.ToUpper()}/{request.UserdetailsCommand.UserImagepath}", request.UserdetailsCommand.UserImageContent!);
+                    request.UserdetailsCommand.UserImagepath = userImagepathServer;
+                }
                 return await repository.InsertUserDetails(request.UserdetailsCommand.CompanyId.GetValueOrDefault(),
                     request.UserdetailsCommand.UserID.GetValueOrDefault(),
                     request.UserdetailsCommand.UserCode,
@@ -43,12 +46,12 @@ namespace FOS.Infrastructure.Commands
                     request.UserdetailsCommand.AadharNumber,
                     request.UserdetailsCommand.PanNumber,
                     request.UserdetailsCommand.Address,
-                    request.UserdetailsCommand.UserImagepath= UserImagepathServer,
+                    request.UserdetailsCommand.UserImagepath,
                     request.UserdetailsCommand.IsActive.GetValueOrDefault(),
                     request.UserdetailsCommand.CreatedBy.GetValueOrDefault(),
                     request.UserdetailsCommand.ErrorCode.GetValueOrDefault());
 
-               
+
             }
         }
     }

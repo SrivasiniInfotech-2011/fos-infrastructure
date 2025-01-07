@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace FOS.Infrastructure.Services.FileServer
+﻿namespace FOS.Infrastructure.Services.FileServer
 {
     public interface IFileServerService
     {
@@ -8,8 +6,8 @@ namespace FOS.Infrastructure.Services.FileServer
         /// Uploads File to a File Server
         /// </summary>
         /// <param name="fileName">File Name.</param>
-        /// <param name="fileBytes"> File Bytes.</param>
-        /// <returns>value of type <see cref="FtpWebResponse>"/></returns>
-        public Task<string> UploadFile(string fileName, string fileContent);
+        /// <param name="fileContent"> File Content.</param>
+        /// <returns>value of type <see cref="string>"/></returns>
+        public string UploadFile(string fileName, string fileContent);
     }
 }
