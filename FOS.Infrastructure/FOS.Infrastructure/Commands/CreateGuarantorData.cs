@@ -21,15 +21,21 @@ namespace FOS.Infrastructure.Commands
                 {
                     if (guarantor!=null)
                     {
-                        var aadharContentBytes = Encoding.UTF8.GetBytes(guarantor.AadharImageContent);
-                        var aadharFileServerUrl=await fileServerService.UploadFile($"GUARANTORS/{guarantor.GuarantorName}/{guarantor.AadharImagePath}", aadharContentBytes);
-                        var panContentBytes = Encoding.UTF8.GetBytes(guarantor.PanImageContent);
-                        var panFileServerUrl = await fileServerService.UploadFile($"GUARANTORS/{guarantor.GuarantorName}/{guarantor.PanImagePath}", panContentBytes);
-                        var guarantorContentBytes = Encoding.UTF8.GetBytes(guarantor.GuarantorImageContent);
-                        var guarantorFileServerUrl = await fileServerService.UploadFile($"GUARANTORS/{guarantor.GuarantorName}/{guarantor.GuarantorImagePath}", guarantorContentBytes);
-                        guarantor.AadharImagePath = aadharFileServerUrl;
-                        guarantor.PanImagePath = panFileServerUrl;
-                        guarantor.GuarantorImagePath = guarantorFileServerUrl;
+                        if (!guarantor.AadharImagePath.Contains("http"))
+                        {
+                            var aadharFileServerUrl = fileServerService.UploadFile($"GUARANTORS/{guarantor.GuarantorName}/{guarantor.AadharImagePath}", guarantor.AadharImageContent);
+                            guarantor.AadharImagePath = aadharFileServerUrl;
+                        }
+                        if (!guarantor.PanImagePath.Contains("http"))
+                        {
+                            var panFileServerUrl = fileServerService.UploadFile($"GUARANTORS/{guarantor.GuarantorName}/{guarantor.PanImagePath}", guarantor.PanImageContent);
+                            guarantor.PanImagePath = panFileServerUrl;
+                        }
+                        if (!guarantor.GuarantorImagePath.Contains("http"))
+                        {
+                            var guarantorFileServerUrl = fileServerService.UploadFile($"GUARANTORS/{guarantor.GuarantorName}/{guarantor.GuarantorImagePath}", guarantor.GuarantorImageContent);
+                            guarantor.GuarantorImagePath = guarantorFileServerUrl;
+                        }
                     }
                 }
                 return await leadsRepository.InsertGuarantorData(request.Lead);

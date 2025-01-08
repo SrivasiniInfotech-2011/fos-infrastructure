@@ -19,14 +19,20 @@ namespace FOS.Infrastructure.Queries
             public int? UserId { get; }
             public string? PrefixText { get; }
 
+            public int? LOB_ID { get; }
+
+            public int? location_ID { get; }
 
 
-            public Query(int? companyId,int? userId,string? prefixText)
+
+            public Query(int? companyId,int? userId,string? prefixText,int?  lobId, int? locationId)
             {
 
                 CompanyId = companyId;
                 UserId = userId;
-                PrefixText = PrefixText;
+                PrefixText = prefixText;
+                LOB_ID = lobId;
+                location_ID = locationId;
 
             }
 
@@ -42,7 +48,7 @@ namespace FOS.Infrastructure.Queries
             }
             public async Task<List<ReportingLevel>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _usermanagementRepository.getUserReportingLevel(request.CompanyId,request.UserId,request.PrefixText);
+                return await _usermanagementRepository.getUserReportingLevel(request.CompanyId,request.UserId,request.PrefixText,request.LOB_ID,request.location_ID);
             }
         }
     }
