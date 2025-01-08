@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/FOS.Infrastructure/FOS.Infrastructure/bin
+/FOS.Infrastructure/FOS.Infrastructure/obj
