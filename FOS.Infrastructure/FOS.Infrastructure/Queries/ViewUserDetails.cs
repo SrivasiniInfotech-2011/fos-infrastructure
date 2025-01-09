@@ -34,7 +34,8 @@ namespace FOS.Infrastructure.Queries
             }
             public async Task<GetInsertUserDetailsModel> Handle(Query request, CancellationToken cancellationToken)
             {
-                return await _getuserrepository.GetExistingUserDetails(request.CompanyId, request.UserId);
+                var response = await _getuserrepository.GetExistingUserDetails(request.CompanyId, request.UserId);
+                return response.FirstOrDefault();
             }
         }
     }
