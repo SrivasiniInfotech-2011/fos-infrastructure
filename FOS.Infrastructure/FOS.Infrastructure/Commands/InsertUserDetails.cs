@@ -20,7 +20,7 @@ namespace FOS.Infrastructure.Commands
             public async Task<int> Handle(Command request, CancellationToken cancellationtoken)
             {
                 //request.UserdetailsCommand.UserImagepath = await fileServerService.UploadFile($"USERS/{request.UserdetailsCommand.UserName.ToUpper()}/{request.UserdetailsCommand.UserImagepath}", userImageContent);
-               var UserImagepathServer = await fileServerService.UploadFile($"USERS/{request.UserdetailsCommand.UserName.ToUpper()}/{request.UserdetailsCommand.UserImagepath}", request.UserdetailsCommand.UserImageContent!);
+               var UserImagepathServer = await fileServerService.UploadFile($"USERS/{request.UserdetailsCommand.UserCode.ToUpper()}/{request.UserdetailsCommand.UserImagepath}", request.UserdetailsCommand.UserImageContent!);
                 return await repository.InsertUserDetails(request.UserdetailsCommand.CompanyId.GetValueOrDefault(),
                     request.UserdetailsCommand.UserID.GetValueOrDefault(),
                     request.UserdetailsCommand.UserCode,
@@ -36,6 +36,7 @@ namespace FOS.Infrastructure.Commands
                     request.UserdetailsCommand.UserGroup,
                     request.UserdetailsCommand.EmailID,
                     request.UserdetailsCommand.Dateofbirth.GetValueOrDefault(),
+                    request.UserdetailsCommand.RelivingDate,
                     request.UserdetailsCommand.FatherName,
                     request.UserdetailsCommand.MotherName,
                     request.UserdetailsCommand.SpouseName,
