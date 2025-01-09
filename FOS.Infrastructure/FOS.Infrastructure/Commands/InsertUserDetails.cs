@@ -39,6 +39,7 @@ namespace FOS.Infrastructure.Commands
                     request.UserdetailsCommand.UserGroup,
                     request.UserdetailsCommand.EmailID,
                     request.UserdetailsCommand.Dateofbirth.GetValueOrDefault(),
+                    request.UserdetailsCommand.RelivingDate,
                     request.UserdetailsCommand.FatherName,
                     request.UserdetailsCommand.MotherName,
                     request.UserdetailsCommand.SpouseName,
